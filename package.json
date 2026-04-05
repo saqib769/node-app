@@ -8,9 +8,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start:prod": "node index.js", 
-    "build": "echo 'Build step: add your build commands here'", 
-    "test": "jest"
+    "test": "jest",
+    "build": "echo 'Building app...' && mkdir -p dist && cp -r *.js views package.json dist/",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "ejs": "^4.0.1",
