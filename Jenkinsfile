@@ -15,20 +15,6 @@ pipeline {
             }
         }
 
-        stage('Install & Build Node.js App') {
-            steps {
-                // Ensure Node and NPM are available
-                sh 'node -v'
-                sh 'npm -v'
-
-                // Install dependencies
-                sh 'npm install'
-
-                // Run build
-                sh 'npm run build'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 sh """
@@ -39,10 +25,9 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker-hub-cred', 
-                    usernameVariable: 'DOCKER_USER', 
-                    passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', 
+                                                 usernameVariable: 'DOCKER_USER', 
+                                                 passwordVariable: 'DOCKER_PASS')]) {
                     sh """
                         echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
                         docker push ${DOCKER_IMAGE}
@@ -57,7 +42,7 @@ pipeline {
             echo "Docker image pushed successfully!"
         }
         failure {
-            echo "Pipeline failed. Check logs for details."
+            echo " Pipeline failed. Check logs for details."
         }
     }
 }
